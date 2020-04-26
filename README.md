@@ -1121,8 +1121,663 @@ __Monitoring Files: AIDE Advanced Intrusion Detection Environment__
 - __tripewire,Samhain__ are some tools that the same and more, use them 
 - [x] the packages wont catch attakers 100% but help you figure it out 
 
+# 8 Debian Package Management
+got to know when not to get yourself in a configure make gcc, gdb problem 
+debian and kali are different and not every debian package will work properly in kaliS
+
+## 8.1. Introduction to APT
+
+### 8.1.1. Relationship between APT and dpkg
+__debian package__ compressed archive of software information
+__binary package__ - files that can be directly used
+__soruce package__ -source code and instructions to build binary
+
+dpkg 
+only  knows what is installed on the system and whatever you provide on the command line, but knows nothing of the other available package
+
+apt 
+installs a packages and does well  to resolve all the dependiences recursively 
+
+gcc,make and compile, the program would always fail because of a missing dependency 
+
+## Understanding APT
+__/etc/apt/sources.list__ - a list of package sources where APT retrieves a package
+
+#### 8.1.2. Understanding the sources.list File
+
+/etc/apt/sources.list & sources.list.d/*
+
+```
+# deb cdrom:[Debian GNU/Linux 2016.1 _Kali-rolling_ - Official Snapshot amd64 LIVE/
+➥ INSTALL Binary 20160830-11:29]/ kali-rolling contrib main non-free
+
+# Main Kali repository
+deb http://http.kali.org/kali kali-rolling main non-free contrib
+```
+
+```mermaid
+graph LR
+A[lines of packages] --> C{field}
+    C -->|First | D[source type: deb for bin, and deb-src for source]
+    C -->|Second | E[base URL for source]
+    C -->|Last | F[repo structure , it will go into dists then take from kali-rolling, and take from the main non-free and contrib folders in there]
+```
+
+-[x] for cd-rom: source yyou need apt-cdrom
+​
+__main__ -  fully comply with the  
+[Debian Free Software Guidelines](https://www.debian.org/social_contract#guidelines) 
+
+__non-free__ - does not conform but ok 
 
 
+__contrib__ - need some 3rd party to run 
+
+#### 8.1.3. Kali Repositories
+
+__Kali-Roling__ the one made for end users updated everyday
+
+__Kali-Dev__ - where Kali devs fix package problems, has the latest new-out-the-box updates
+
+__Kali-Bleeding-Edge__ - as soon as Kali fixes a reported bug they place it here 
+, they are not tested so APT marks as "watch out" when doing dist-upgrade 
+keep it away from main sources.list 
+
+- [x] if you a mirror problem 
+```
+curl -sI http://http.kali.org/README
+HTTP/1.1 302 Found
+Date: Mon, 11 Apr 2016 09:43:21 GMT
+Server: Apache/2.4.10 (Debian)
+X-MirrorBrain-Mirror: ftp.free.fr
+X-MirrorBrain-Realm: country
+Link: <http://http.kali.org/README.meta4>; rel=describedby;
+➥ type=”application/metalink4+xml”
+Link: <http://ftp.free.fr/pub/kali/README>; rel=duplicate;
+➥ pri=1; geo=fr
+Link: <http://de-rien.fr/kali/README>; rel=duplicate; pri=2;
+➥ geo=fr
+Link: <http://ftp.halifax.rwth-aachen.de/kali/README>; rel=
+➥ duplicate; pri=3; geo=de
+Link: <http://ftp.belnet.be/kali/kali/README>; rel=duplicate;
+➥ pri=4; geo=be
+Link: <http://ftp2.nluug.nl/os/Linux/distr/kali/README>; rel=
+➥ duplicate; pri=5; geo=nl
+Location: http://ftp.free.fr/pub/kali/README
+Content-Type: text/html; charset=iso-8859-1
+
+```
+
+* kali iso 
+➨ http://cdimage.kali.org
+
+* to look at mirror
+➨ http://http.kali.org/README.mirrorlist
+➨ http://cdimage.kali.org/README.mirrorlist,
+- [x] some countries wont let you see it
+
+## 8.2. Basic Package Interaction
+
+### 8.2.1. Initializing APT
+
+apt was design to overcome flaws of apt-get, but it must be the other way around, 
+download with apt update, CD/dvd/usb are much faster
+
+### 8.2.2. Installing Packages
+
+#### *dpkg*
+```
+# dpkg -i man-db_2.7.0.2-5_amd64.deb
+```
+
+--install actually does --unpack and --configure seperately
+* __processing  triggers__ when a pacakges modifies files in monitored directories 
+* dpkg will fail to install a package and return an error but you can use
+--force-overwrite 
+* if dpkg encounters a file installed by another file dpkg will refuse to install it, use that --force-overwrite fn if u think yr system will be ok 
+
+
+#### *APT*
+* lots of *dpkg-behind-the-scenes*
+also apt-get aptitude install
+
+* several- distros 
+apt install [package=version]
+
+* to force overwrite 
+apt -o Dpkg::Options::=”--force-overwrite" install zsh
+
+### 8.2.3. Upgrading Kali Linux
+
+* to update kali
+    > apt-get upgrade, aptitude safe-upgrade 
+
+- [x] apt-get wont install packages that were not installed beforehand 
+
+- apt uses most recent version ## 
+
+- to use a specific distro
+    > -t,--target-release 
+    apt -t kali-rolling upgrade
+
+- to set default option 
+    > APT::Default-Release ”kali-rolling”; in the file /etc/apt/apt.conf.d/local
+
+- to change the OS to a new major distro 
+    > apt ,aptitude full-upgrade , apt-get dist-upgrade
+    removes obsolete packages or
+    install new dependencies
+
+- __apt-listchanges__ helps to see problems before you do any upgrades 
+refer to NEWS.Debian 
+
+- update only when you have security bugs 
+- dont when u have a presentation 
+- package mixup 
+- full-upgrade tells u it will toss yr work 
+- kali, update once a week 
+
+### 8.2.4. Removing and Purging Packages
+
+__dpkg__ -r, --remove 
+
+but all the config files, maintainer scripts, logs, dependencies still there for easy reinstall
+
+* to remove all data, and user data 
+    > dpkg -P package
+
+
+__apt__ only removes dependencies 
+
+apt install package1 package2- , to uninstall  packages with (-)
+apt remove package1+ package2 tp install packages with (+)
+
+* to remove all data, and user data 
+    > apt -o Dpkg::Options::=”-P"   package
+
+
+### 8.2.5. Inspecting Packages
+
+#### Querying dpkg’s Database and Inspecting .deb Files
+
+* theres a dpkg database
+* its at */var/lib/dpkg/info*
+* list of files installed */var/lib/dpkg/info/\*/list*
+* status  */var/lib/dpkg/status*
+
+* --listfiles package (-L), files installed by specified package 
+
+* dpkg -S,--search [File]
+searches for file then searches for pacakges it belongs to 
+
+* dpkg --status,-s [package]
+displays headers of installed package 
+
+* dpkg --contents,-c [file.deb] lists contents in a .deb
+
+* dpkg --info [file.deb] (or -I) 
+headers for .deb file 
+
+* dpkg --compare-versions 1.2-3 gt 1.1-4
+with strings
+replace
+2.6.0pre3-1
+with   
+2.6.0~pre3-1 
+
+#### Querying the Database of Available Packages with apt-cache and apt
+
+- [x] apt does caching and you should clear out packages in /var/lib/apt/lists/ the /var/cache/apt/archives/ by using __apt ,apt-get clean__ entirely empties the directory
+__apt ,apt-get autoclean__ only removes packages not in the mirror 
+
+
+config param __APT::Clean-Installed__ keeps your .deb  files
+
+__axi-cache__ is a better program
+
+> apt-cache search [keyword]
+gives a whatis 
+
+> apt-cache show [keyword]
+gives a lot of metadata 
+
+less used, but useful
+
+> apt-cache policy
+priorities of package sources
+
+> apt-cache dumpavail
+display headers for all availble package versions 
+
+> apt-cache pkgnames 
+names all of packages at least once in the cache 
+
+
+### 8.2.6. Troubleshooting
+
+#### Handling Problems after an Upgrade
+
+> Bug Reports
+
+[Kali Bug Tracker](http://bugs.kali.org/)
+[Debian Bug Tracker](https://bugs.debian.org/)
+
+u can recompile it 
+users posted workarounds 
+
+> Downgrade 
+
+Kali-roling theres usually one package version
+
+try to find the .deb package and install with dpkg check in  
+
+*  /var/cache/apt/archives/
+* __pool__ directory in your kali mirro
+*  http://snapshot.debian.org if it was debian 
+
+#### Dealing with Broken Maintainer Scripts
+
+usually __postinst__ script fails 
+* edit the script 
+* maintainer scripts stored in /var/lib/dpkg/info/
+* add 
+```
+#!/bin/sh
+set -x
+```
+```terminal
+dpkg --configure -a 
+```
+-a means postinstall to see what going on 
+- [x] not for preinstall since package is not in its final location.
+- [x] for postrm and prerm, you need to do a package removal to execute 
+
+#### The dpkg Log File
+
+> all of its actions very verbose
+/var/log/dpkg.log
+
+#### if you damage a package
+
+*apt,apt-get,aptitude --reinstall install [package]
+*if you do install dpkg sees its there and will say no 
+* do use reinstall, attackers might have modified apt or dpkg 
+
+#### Leveraging --force-* to Repair Broken Dependencies
+
+if there is a missing dependency or a broken package apt wont do anything. apt wants the system to be in a consistent state 
+
+modify */var/lib/dpkg/status
+* in order for apt to stay in an unconsistent state 
+* __backports__ newer version recompiled to run in older env.
+
+### 8.2.7. Frontends: aptitude and synaptic
+
+APT is a C++ program from the *libapt-pkg* shared library. shared libraries are easier to make GUI's from 
+
+#### Aptitude
+
+has packages in a tree structure 
+__+__ mark  for install
+__-__ mark to remove 
+__\___ to purge
+__u__ - update 
+__shift__+u global system upgrade 
+__g__ summary view 
+__gg__ apply changes
+
+Aptitude full manaul you must use - file:///usr/share/doc/aptitude/html/en/index.html
+
+> to search for a package 
+~d description
+~s section
+~l limit 
+the enter / then pattern 
+
+you can use aptitude tools inside the command line 
+
+on upgrade the recommended package will be listed so the admin can select it 
+
+aptitude is better then apt at solving problems, but you still get to manually choose what to do 
+
+
+> aptitiude's log
+/var/log/aptitude - contains history about system wide changes, not trustworthy 
+
+#### Synpatic 
+full fledged GUI 
+make aptitude simple 
+
+## 8.3. Advanced APT Configuration and Usage
+
+### 8.3.1. Configuring APT
+
+> apt's config 
+/etc/apt/apt.conf.d/
+latter alphabet files config the first ones 
+
+- [x] if there is a command to reset the conf watch for your manual changes, at the same time watch for the command for the package to see yr conf changes
+
+ - can add directives in on of the apt.conf.d, usually named local or 99local 
+
+Dpkg::Options {
+”--force-overwrite”;
+}
+
+> Some directives 
+Acquire::http::proxy ”http://yourproxy:3128”
+Acquire::ftp::proxy ”ftp://yourproxy”
+
+
+### 8.3.2. Managing Package Priorities
+  
+each has a priority of 100
+A noninstalled version has a priority of 500
+
+modify 
+add entry in __/etc/apt/preferences__
+* affected,version,origin,new priority
+
+| Priority      | Action        |
+| ------------- | ------------- |
+| <0             | Never Be Installed  |
+| 0-100  | Installed if no version is installed  |
+|100-500| installed if no other new or availble in  another distro|
+|501-990|installed if no newer version or one availble in the target distro |
+|990-1000|installed except the installed version is newer|
+|>1000|installs it no matter what|
+
+* packages from debian experimental and kali bleeding-edge are given a priority of 1 to change give an entry in /etc/apt/preferences
+```
+Package: *
+Pin: release a=kali-bleeding-edge
+Pin-Priority: 500
+```
+
+more ex 
+
+```
+Package: *
+Pin: release o=Kali
+Pin-Priority: 900
+Package: *
+Pin: release o=Debian
+Pin-Priority: -10
+```
+
+to ensure a version is not chaged 
+```
+Package: perl
+Pin: version 5.22*
+Pin-Priority: 1001
+```
+
+more info 
+> man apt_preferences
+
+### 8.3.3. Working with Several Distributions
+
+apt install package/
+unstable instalss from debian/unstable 
+-t flag to fix things
+
+
+> Example 
+
+install a v1
+
+a v1 *Kali-Rolling* = 990
+a v2 *Kali Dev* = 500
+a v3 *Kali Unstable* = 500
+
+kali keeps v1 
+
+install a v2 
+
+a v1 *Kali-Rolling* = 990
+a v2 *Kali Dev* = 500
+a v3 *Kali Unstable* = 500
+
+kali takes debian unstable 
+
+to avoid this 
+
+```
+Package: *
+Pin: release a=unstable
+Pin-Priority: 490
+```
+
+### 8.3.4. Tracking Automatically Installed Packages
+
+apt-mark auto   package
+apt-mark manual package
+
+for automatic removal of unessecary packages
+
+aptitude markauto 
+aptitude unmarkauto
+
+* to see why 
+aptitude why [package]
+> apt,apt-get dont have this 
+
+### 8.3.5. Leveraging Multi-Arch Support
+
+only installs same *armhf* *arm64*
+from dpkg --print-architecture
+
+#### Enabling Multi-Arch
+
+dpkg --add-architecture 
+dpkg --remove-architecture,
+only when all arch-specifc packages are gone 
+
+* can install packages 
+apt install package:[architecture]
+
+#### Multi-Arch Related Changes
+
+the __Multi-Arch: same__ header various architectures can be safely coinstalled
+
+
+* must have names qualified w/ their arch.
+* share files with other instace of same package 
+* dpkg ensures all files are bit for bit identical
+* must have same version 
+
+dependency architecture
+* dependency can be weakened with __package:any__  , but foreign packages only satisfy with __Multi-Arch: allowed__
+
+### 8.3.6. Validating Package Authenticity
+
+Kali provides a tamper-proof seal 
+f cryptographic hashes and a signature.
+
+signed file is in the Release file 
+list of packages, Packages.gz, Packages.xz 
+MD5, SHA1, and SHA256 hashes,
+
+* trusted keys are managed by the __apt-key__ 
+* only the offical Kali-keys for their mirrors are needed 
+* kept up to date by *kali-archive-keyring*
+* in /etc/apt/trusted.gpg.d
+* Cautious administrators should therefore check the fingerprints of imported keys before trusting
+them to install new packages:
+
+
+* when 3rd party-package is added to sources.list, apt needs to be told to trust it 
+
+* we need a public key (__key.asc__) to do this 
+
+* to add it 
+    > apt-key add < key.asc
+
+* apt will then check the signatures before operation
+
+
+## 8.4. Package Reference: Digging Deeper into the Debian Package System
+
+* for any given .deb file 
+    - __debian-binary__ - single version ## describing archive format
+    - __control.tar.gz__ - contains meta-info
+    - __data.tar.xz__ - contains the actual files to be installed
+
+
+### 8.4.1. The control File
+
+* location - control.tar.gz archive
+* to see it - dpkg -I [command]
+* contains vital info abt package
+
+```
+$ dpkg -I apt_1.4~beta1_amd64.deb control
+Package: apt
+Version: 1.4~beta1
+Architecture: amd64
+Maintainer: APT Development Team <deity@lists.debian.org>
+Installed-Size: 3478
+Depends: adduser, gpgv | gpgv2 | gpgv1, debian-archive-keyring, init-system-helpers (>=
+➥ 1.18~), libapt-pkg5.0 (>= 1.3~rc2), libc6 (>= 2.15), libgcc1 (>= 1:3.0),
+➥ libstdc++6 (>= 5.2)
+Recommends: gnupg | gnupg2 | gnupg1
+Suggests: apt-doc, aptitude | synaptic | wajig, dpkg-dev (>= 1.17.2), powermgmt-base,
+➥ python-apt
+Breaks: apt-utils (<< 1.3~exp2~)
+Replaces: apt-utils (<< 1.3~exp2~)
+Section: admin
+Priority: important
+Description: commandline package manager
+This package provides commandline tools for searching and
+managing as well as querying information about packages
+as a low-level access to all features of the libapt-pkg library.
+.
+These include:
+* apt-get for retrieval of packages and information about them
+from authenticated sources and for installation, upgrade and
+removal of packages together with their dependencies
+* apt-cache for querying available information about installed
+as well as installable packages
+* apt-cdrom to use removable media as a source for packages
+* apt-config as an interface to the configuration settings
+* apt-key as an interface to manage authentication keys
+
+```
+
+#### Dependencies: the Depends Field
+* list of conditions for the package to work correctly 
+    - <<: less than;
+    - <=: less than or equal to;
+    - =: equal to (note that “2.6.1” is not equal to “2.6.1-1”);
+    - \>=: greater than or equal to;
+    - \>>: greater than.
+* Depends doesn't like the use of parentheses for [logical comaparison](http://www.debian.org/doc/debian-policy/ch-relationships.html)
+* __meta-packages__ empty packages to help group other packages
+
+#### Pre-Depends, a More Demanding Depends
+
+* means packaged must be conf. before pre-install 
+* do as last resort
+
+#### Recommends, Suggests, and Enhances Fields
+
+* recommends - optimizes main package
+* suggests- additional features
+* enhances- a suggestion in a different cotext, ignored by apt and synaptic
+
+#### Conflicts: the Conflicts Field
+* conflicts shows whether package cannot be installed with another
+* dpkg wont install unless new says it will replace the old
+
+#### Incompatibilities: the Breaks Field
+
+* package will break another. happens when updates are not backwards compat 
+
+#### Provided Items: the Provides Field
+
+* virtual package , using a virtual package to associate a generic
+service with it 
+    - so instead of say i need dep. a,b,c the package says, I need a mail client 
+    __service__ 
+
+
+* package replaces another but still satisfies dependecies as a substitution package 
+
+__Virtual packages__ - they are only a means of identifying real packages based on common, logical criteria
+
+![](provides_in_control_for_packages.PNG)
+
+in the image, perl 5.8 has the dep built in, so now apt can toss it once the legacy
+perl is removed
+
+#### Replacing Files: The Replaces Field
+
+* package has deps in another package but package can remove them
+* when package names change, included in another or the maintainer distrib. bin. differently 
+* all files in package replaced, packge is considered to be removed
+
+### 8.4.2. Configuration Scripts
+
+* different stages in processing a packagae 
+* postinst, postrm, preinst, prerm
+* $ dpkg -I /var/cache/apt/archives/zsh_5.3-1_amd64.deb | head
+
+* preinst prior to package install
+* postinst follows it
+* prerm -  before package install
+* postrm -  after package install
+
+#### Installation and Upgrade Script Sequence
+
+>  installation (or an update):
+1. update- old-prerm upgrade new-version.
+2. update -new-preinst upgrade old-version
+
+    first install -new-preinst install [old-verison] if installed & removed, not purged
+3.  new packaged files are unpacked
+4. update- old-postrm upgrade new-version
+5. dpkg updates all data, and deletes backup
+6. updates conf files
+7. new-postinst configure lastversion-configured
+
+>  removal 
+
+1. prerm remove 
+2. dpkg removes all files except conf
+3.  postrm remove, #without purge it stops 
+4. if purge, tosses everything then postrm purge 
+
+package might require debconf, used to handle package conf questions
+
+### 8.4.3. Checksums, Conffiles
+
+* in the package you have a  ./md5sums, for every file invovled
+* dpkg will generate it at installation time if it does not exist
+* __conffiles__ conf to be changed by root, dpkg will try not to update those changes 
+    - old stays as  .dpkg-old s
+    - new stays as .dpkg-dist
+    - for dpkg to do automatic
+        - --force-confold
+        - --force-confnew
+        - --force-confdef
+    - for dpkg to do manual 
+        - --force-confask
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
 
 
