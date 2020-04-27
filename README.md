@@ -4,7 +4,7 @@ refer to page 22 to understand how the book is split up
 
 enterprise-ready security  auditing Linux distro 
 
-kernel - piece of software that handles interaction btwn hardware and end-user apps 
+__kernel__ - piece of software that handles interaction btwn hardware and end-user apps 
 
 Kali started in 2012 because people wanted the OS to be mainline Linux 
 
@@ -20,727 +20,757 @@ Kali want latest Debian wanted stable
     bunch of repos and bug fixing 
 
 
-    Kali Package Tracker - http://pkg.kali.org/derivative/kali-dev/
+[Kali Package Tracker](http://pkg.kali.org/derivative/kali-dev/)
         follows difference from Debian 
 
     can be ported on several devices 
 
 ## 1.4 main features
 
-    has 100's of programs 
-    setup Kali as the main OS on any computer 
-    has a live bootable system 
-    can reboot a computer to kali 
-    its kernel is up to date to provide all needed resources 
-    customizable 
-    kali is open sourced 
-    can be deployed on any device 
+* has 100's of programs 
+* setup Kali as the main OS on any computer 
+* has a live bootable system 
+* can reboot a computer to kali 
+* its kernel is up to date to provide all needed resources 
+* customizable 
+* kali is open sourced 
+* can be deployed on any device 
 
 ## 1.5 Kali linux poliucy 
 
-    single root user by default
-    network ICMP  disabled by default 
+* single root user by default
+* network ICMP  disabled by default 
 
 # 2 Getting started 
 
 ## 2.1 download a trustworthy Kali ISO image 
+
 www.kali.org/downloads 
 MIRRORS for servers close to you 
 ➨ http://cdimage.kali.org/README.mirrorlist
 
-links are latest release, 
-devices with ARM processor -use  Linux armel or armhf 
+* links are latest release, 
+* devices with ARM processor -use  Linux armel or armhf 
 
 32 or 64 bit 
-    Windows- Accessories >System Tools folder > System Information >System Type 
-    Mac OS uname -m 
-    Linux inspect the /proc/cpuinfo file with this command 
-    $ grep -qP ’^flags\s*:.*\blm\b’ /proc/cpuinfo && echo 64-bit
-    ➥ || echo 32-bit
+* Windows- Accessories >System Tools folder > System Information >System Type
+    
+* Mac OS uname -m 
+
+* Linux inspect the /proc/cpuinfo file with this command 
+```
+    $ grep -qP ’^flags\s*:.*\blm\b’ /proc/cpuinfo && echo 64-bit || echo 32-bit*
+```
+
 
 
 default and light 
-default -GNOME and all packages 
-light - Xfce and some for resource-friendly 
-others use other desktop environments 
+* default -GNOME and all packages 
+* light - Xfce and some for  resource-friendly 
+* others use other desktop environments 
 
 the actual download link is unprotected 
 you need to make sure you have the right checksum
     trust HTTPS  
     they have a GnuPG key which you can use 
-    wget -q -O - https://www.kali.org/archive-key.asc | gpg --import
+```
+wget -q -O - https://www.kali.org/archive-key.asc | gpg --import
+```
 all options have limitations 
 
 
 after the key you can verify the checksums 
+```
 $ wget http://cdimage.kali.org/current/SHA256SUMS
 $ wget http://cdimage.kali.org/current/SHA256SUMS.gpg
 gpg --verify SHA256SUMS.gpg SHA256SUMS
 grep kali-linux-2017.1-amd64.iso SHA256SUMS | sha256sum -c
-    if these dont add up you cnat trust it
-
-    
+```
+* if these dont add up you cant trust it
 
     
 #### Creating a Windows bootable 
     grab your favorite software and go 
+    Rufus industry-standard
 
 #### Creating a Linux bootable 
-    use the GNOME disks program 
-    when linux kernel sees it it writes it name in the logs 
-    access with the dmesg command 
-    you will see [sdb] in the logs representing drive disk 
-    to copy the image 
-        dd if=kali-linux-light-2017.1-amd64.iso of=/dev/[parrtiton name if not sdb]
+* use the GNOME disks program 
+* when linux kernel sees it it writes it name in the logs 
+* __dmesg__ command to access 
+* you will see [sdb] in the logs representing drive disk 
+to copy the image 
+```
+dd if=kali-linux-light-2017.1-amd64.iso of=/dev/[parrtiton name if not sdb]
+```
+
         
 #### Creating the mac bootable 
-    to identify device 
-        diskutil list 
-        insert usb > diskutil list
-        note the /dev/disk[X]
-    unmonunt disk 
-        diskutil unmount /dev/disk6
-    execute dd
-        dd if=kali-linux-light-2017.1-amd64.iso of=/dev/disk6 bs=1M
+to identify device 
+```
+diskutil list 
+insert usb > diskutil list
+note the /dev/disk[X]
+```
+unmonunt disk 
+```
+diskutil unmount /dev/disk6
+```
+execute dd
+```
+dd if=kali-linux-light-2017.1-amd64.iso of=/dev/disk6 bs=1M
+```
+
 
 ## 2.2 booting an iso in live 
 
-    boot menu and boot 
+boot menu and boot 
 
-    in virtual Box 
-        x64 OS 
-        need 1500 mb -2048 mb of ram
-        choose hard disk, VDI 
-        choose dynamically allocated storage 
-        at least 20GB
+__Virtual Box__ 
+* x64 OS 
+* need 1500 mb -2048 mb of ram
+* choose hard disk, VDI 
+* choose dynamically allocated storage 
+* at least 20GB
 
-    for final config
-    Settings > Storage >Storage Tree > Controller:IDE > Empty > Attributes > Optical Drive >
-    Disk Icon > Choose Virtual Optical Disk File 
-    
-    Settings > System > Motherboard > check floppy ,optical, hardrive
+for final config
+* Settings > Storage >Storage Tree > Controller:IDE > Empty > Attributes > Optical Drive > Disk Icon 
+> Choose Virtual Optical Disk File 
+* Settings > System > Motherboard > 
+> check floppy ,optical, hardrive
+* Settings > System > Processor \
+> enable PAE/NX if 32-bit
 
-    Settings > System > Processor > enable PAE/NX if 32-bit
+__VM Ware__ 
+* Create New Virutal Machine  > Typcical
+* Guest OS Installlation > Installer disc image file  > Select the image file > 
 
-    in VM Ware 
-        Create New Virutal Machine  > Typcical
+* VMWare should know 
+    its Linux and Debian 8.x 
 
-        Guest OS Installlation > Installer disc image file  > Select the image file > 
+* Decide which folder to store the virtual machine
 
-        VMWare should know 
-            its Linux and Debian 8.x 
+* Specify Disk Capacity > store over multiple files  
 
-        Decide which folder to store the virtual machine
+* Customize Hardware > Memory > 1500mb - 2048 mb 
 
-        Specify Disk Capacity > store over multiple files  
-
-        Customize Hardware > Memory > 1500mb - 2048 mb 
-
-    Power on Virutal Machine
+* Power on Virutal Machine
 
 
 # 3. Linux Fundamentals
 
-    What is Linux 
-        its a conductor of an orchestra > its yr kernel > by bootloader > by BIOS 
+What is Linux 
+* its a conductor of an orchestra > its yr kernel > by bootloader > by BIOS 
 
-    Tasks handled by Linux kernel 
-        -it detects and configures hardware to be of use in the OS, it handles device specfifc details 
-        so you dont have to write them out in python. Zoom can use any webcam because it talks to the 
-        kernel video interface which handles it.
-        -exports data about detected hardware through /proc and /sys 
-        -apps access files using /dev 
-            /dev/sda - disk drive 
-            /dev/sda[number] - partition 
-            /dev/input/mouse0 - mice 
-            /dev/input/event0 - keyboard 
-            (/dev/snd/*) - sound cards 
-            /dev/ttyS* - serial ports 
+Tasks handled by Linux kernel 
+- it detects and configures hardware to be of use in the OS, it handles device specfifc details so you dont have to write them out in python. Zoom can use any webcam because it talks to the kernel video interface which handles it.
+- exports data about detected hardware through /proc and /sys 
+- apps access files using /dev 
+    * /dev/sda - disk drive 
+    * /dev/sda[number] - partition 
+    * /dev/input/mouse0 - mice 
+    * /dev/input/event0 - keyboard 
+    * (/dev/snd/*) - sound cards 
+    * /dev/ttyS* - serial ports 
 
-        device files 2 types 
-            block - finite and traversable 
-            character- stream, r/w only 
+- device files 2 types 
+__block__ - finite and traversable 
+__character__- stream, r/w only 
 
-        to identify a device file 
-            $ ls -l /dev/sda /dev/ttyS0
-            brw-rw---- 1 root disk 8, 0 Mar 21 08:44 /dev/sda   b for block 
-            crw-rw---- 1 root dialout 4, 64 Mar 30 08:59 /dev/ttyS0 c for character 
 
-        device commands 
-            ioctl 
+- identify a device file 
+```
+$ ls -l /dev/sda /dev/ttyS0
+brw-rw---- 1 root disk 8, 0 Mar 21 08:44 /dev/sda   
+crw-rw---- 1 root dialout 4, 64 Mar 30 08:59 /dev/ttyS0 
+b for block 
+c for character 
+```
+
+device commands 
+    ioctl 
         
-    File System 
-        one disk becomes root everyone else is mounted in /media 
-        users accts, no matter where they are, mount at /home 
-        
-        mkfs.ext3 [partition]
+File System 
+* one disk becomes root everyone else is mounted in /media 
+* users accts, no matter where they are, mount at /home 
+```
+mkfs.ext3 [partition]
+```
 
-    Processes 
-        kernel is in charge of them 
-        only one process runs at a time,    
-        the kernel stops and starts process in milliseconds
-        except you have multi-core or hyper processor 
+Processes 
+* kernel is in charge of them 
+* only one process runs at a time,    
+* the kernel stops and starts process in milliseconds
+    - except you have multi-core or hyper processor 
 
-    Command line 
-        can access in terminal 
-        can also access using CTRL +ALT +F1 - F6 if gui is broken, or omit CTRL 
-        trailing “$“ or “#” , awaiting input $ -reg user # -superuser 
+Command line 
+* can access in terminal 
+* can also access using CTRL +ALT +F1 - F6 if gui is broken, or omit CTRL 
+* trailing $ or \# , awaiting input 
+* $ -reg user 
+* \# -superuser 
 
-        ENV 
-            system-wide /etc/profile 
-            per-user .profile 
-            also in /etc/environment
+ENV 
+* system-wide /etc/profile 
+* per-user .profile 
+* also in /etc/environment
 
         
 #### File System 
-    consistent with the FHS 
+consistent with the FHS 
 
-    • /bin/: basic programs
-    • /boot/: Kali Linux kernel and other files required for its early boot process
-    • /dev/: device files
-    • /etc/: configuration files
-    • /home/: user’s personal files
-    • /lib/: basic libraries
-    • /media/*: mount points for removable devices (CD-ROM, USB keys, and so on)
-    • /mnt/: temporary mount point
-    • /opt/: extra applications provided by third parties
-    • /root/: administrator’s (root’s) personal files
-    FHS)
-    • /sbin/: system programs
-    • /srv/: data used by servers hosted on this system
-    • /tmp/: temporary files (this directory is often emptied at boot)
-    • /usr/: applications (this directory is further subdivided into bin, sbin, lib according to
-    the same logic as in the root directory) Furthermore, /usr/share/ contains architectureindependent data.
-        The /usr/local/ directory is meant to be used by the administrator for
-    installing applications manually without overwriting files handled by the packaging system
-    (dpkg).
-    • /var/: variable data handled by daemons. This includes log files, queues, spools, and caches.
-    • /proc/ and /sys/ are specific to the Linux kernel (and not part of the FHS). They are used
-    by the kernel for exporting data to user space   
+• /bin/: basic programs
+• /boot/: Kali Linux kernel and other files required for its early boot process
+• /dev/: device files
+• /etc/: configuration files
+• /home/: user’s personal files
+• /lib/: basic libraries
+• /media/*: mount points for removable devices (CD-ROM, USB keys, and so on)
+• /mnt/: temporary mount point
+• /opt/: extra applications provided by third parties
+• /root/: administrator’s (root’s) personal files 
+• /run/: volatile runtime data that does not persist across reboots (not yet included in the FHS
+• /sbin/: system programs
+• /srv/: data used by servers hosted on this system
+• /tmp/: temporary files (this directory is often emptied at boot)
+• /usr/: applications (this directory is further subdivided into bin, sbin, lib according to
+the same logic as in the root directory) Furthermore, /usr/share/ contains architecture independent data.
+    The /usr/local/ directory is meant to be used by the administrator for
+installing applications manually without overwriting files handled by the packaging system
+(dpkg).
+• /var/: variable data handled by daemons. This includes log files, queues, spools, and caches.
+• /proc/ and /sys/ are specific to the Linux kernel (and not part of the FHS). They are used
+by the kernel for exporting data to user space   
 
-    Home dir 
+Home dir 
 
-        lots of . files in the home dir, Firefox leaves its downloads in cache a lot of storage space 
-        FreeDesktop.org umbrella wants to clean this up 
-            ~/.config , ~/.cache . ~/.local
+* lots of . files in the home dir, 
+* Firefox leaves its downloads in cache a lot of storage space 
+* FreeDesktop.org umbrella wants to clean this up 
+    - ~/.config ,
+    - ~/.cache .
+    - ~/.local
         
-    Useful commands 
+Useful commands 
 
-        grep -r, all files in directory
-
-        run a program in background 
-        [program name] & 
-        
-        to see a list of jobs 
-            jobs 
-        
-        to bring a process back to the terminal
-            fg [job-number]
-
-        to unpause a background process 
-            bg [job-number]
-
-    Manageing rigihs 
-
-        setuid and setgid are file permissions that allow to any user as if they were user or group 
-        you can do a buffer overflow on a setuid root prorgram and become root so look for these files 
-
-        sticky bit, t only allows for owner or the owner of the parent dir to create or delete them 
+all files in directory
+```
+grep -r,
+```
+run a program in background 
+```
+[program name] & 
+```    
+to see a list of jobs 
+```        
+jobs 
+```    
     
-        for chmod can use octal or use 
-        u=rwx,g+rw,o-x
+to bring a process back to the terminal
+```
+fg [job-number]                
+```                
 
-        setuid,setgid,sticky bit 4,2,1 respective 
+to unpause a background process 
+```
+bg [job-number] 
+``` 
 
-        umask 
-            system removes these permissions when files are created 
-            its a 4 digit octal number 
-            defailt 0022 means remove write for group and other  
+
+####   Managing rights
+
+* setuid and setgid are file permissions that allow to any user as if they were user or group 
+* you can do a buffer overflow on a setuid root prorgram and become root so look for these files 
+* sticky bit, t only allows for owner or the owner of the parent dir to create or delete them   
+* for chmod can use octal or use 
+u=rwx,g+rw,o-x
+* setuid,setgid,sticky bit 4,2,1 respective 
+
+__umask__  - system removes these permissions when files are created 
+* its a 4 digit octal number 
+* default 0022 means remove write for group and other  
             
             
-    System info 
+####    System info 
 
-        free 
-            displays men info 
+__free__ - displays mem info 
         
-        df 
-            display info about partitions and drives
+__df__ -display info about partitions and drives
 
-        id 
-            info about the whoami 
+__id__ - info about the whoami 
 
-        uname -a 
-            kernel name 
-            machine type 
-            OS name 
-        
-        dmesg 
-            such as a new USB device being inserted,
-            a failing hard disk operation, 
-            or initial hardware detection on boo
+__uname -a__ 
+    kernel name 
+    machine type 
+    OS name 
 
-        journalctl 
-            -f stream of new log entries 
-            -u limit messages from a system unit 
-            -r newer messages shown first 
+__dmesg__  - hardaware messages
+* as a new USB device inserted,
+* a failing hard disk operation, 
+* or initial hardware detection on boo
 
-    Discovering Hardware 
+__journalctl__ 
+* -f stream of new log entries 
+* -u limit messages from a system unit 
+* -r newer messages shown first 
 
-        lspci -lists pci devices 
-        lsusb - lists usb devices 
-        lspcmcia - lists the pcmcia cards 
-        lsdev- comm. resources by dev
-        lshw - combines above (good for hardware problems)
+#### Discovering Hardware 
+
+* __lspci__ -lists pci devices 
+* __lsusb__ - lists usb devices 
+* __lspcmcia__ - lists the pcmcia cards 
+* __lsdev__- comm. resources by dev
+* __lshw__ - combines above (good for hardware problems)
 
 
 # 4 Installing Kali 
 
-    min req 
-        CPU supports amd64,i386,armel,armhf,arm64 
+min req 
+    CPU supports amd64,i386,armel,armhf,arm64 
 
-    installing 
-        Isolinux boot loader menu >
-        install/ graphical install 
-        select a language 
-        select country 
-        choose American English Keyboard 
-        detects the bootloader 
-        installer puts all its drivers in the bootloader 
-        if it cant find the right module you choose one, or you download from removable drive 
-        then it tries to perform DHCP 
-                netcfg/use_dhcp=false, when booting,edit with Tab Key > 
-                add desired option >
-                Press Enter 
-        enter admin password 
-            pwgen helps generate passwords
-        configure the clock 
-            if theres a network system is updated witH NTP
-        detecting disks 
-            partitioning 
-                use gparted 
-            Guided- installs Kali on the whole disk 
-                Partition disks 
-                    all files in 1 partition - makes the / and the swap for memory 
-                    seperate /home - good if you have to reinstall the system 
-                    seperate /home/, /var and /tmp partitons -servers  
-                        daemon data and users cannot clog the rest of the system 
-                Partiton Map
-                    what the installer will do to the hard drive 
-            Manual- page 
-                avail disks, parttions and free space 
-                new disks - new parttion table
-                free space 
-                    new parttiton, 
-                    cylinder/head/sector info 
-                New Partiton 
-                    format 
-                    swap 
-                    encrpytion volume 
-                    LVM volume 
-                    RAID device 
-                    do not use 
+#### installing 
+* Isolinux boot loader menu >
+install/ graphical install 
+* select a language 
+* select country 
+* choose American English Keyboard 
+* detects the bootloader 
+* installer puts all its drivers in the bootloader 
+* if it cant find the right module you choose one, or you download from removable drive 
+* then it tries to perform DHCP 
+    - netcfg/use_dhcp=false, when booting,edit with Tab Key > 
+    add desired option >
+    Press Enter 
+enter admin password 
+    __pwgen__ helps generate passwords
+configure the clock 
+    if theres a network system is updated with NTP
+detecting disks 
+    partitioning 
+        use gparted 
+    - Guided- installs Kali on the whole disk 
+    Partition disks 
+        - all files in 1 partition - makes the / and the swap for memory 
+        - seperate /home - good if you have to reinstall the system 
+        - seperate /home/, /var and /tmp partitons for servers  
+            - daemon data and users cannot clog the rest of the system 
+Partiton Map
+    what the installer will do to the hard drive 
+    Manual- page 
+        - avail disks, parttions and free space 
+        - new disks - new parttion table
+        free space 
+            new parttiton, 
+            cylinder/head/sector info 
+        New Partiton 
+            - format 
+            - swap 
+            - encrpytion volume 
+            - LVM volume 
+            - RAID device 
+            - do not use 
 
-        Copying live  image
-            places image on a partition
+    Copying live  image
+        places image on a partition
 
-        Config package manager 
-            mirror http.kali.org, if no must be configured 
-
-            using a local mirror 
-                at boot mirror/http/hostname=my.own.mirror
+    Config package manager 
+        - mirror http.kali.org, if no must be configured 
+        - using a local mirror 
+            at boot
+```
+mirror/http/hostname=my.own.mirror
+```            
             
-            HTTP proxy, 
-                good for caching or else installer does direct access 
+    HTTP proxy, 
+        good for caching or else installer does direct access 
 
-            Packages.xz and Sources.xz, to update /etc/apt/sources.list            
+        Packages.xz and Sources.xz, to update /etc/apt/sources.list            
 
-    Installing GRUB bootloader 
+Installing GRUB bootloader 
 
-        what is it 
-            loads linux kernel into memory and executes it 
+what is it 
+    loads linux kernel into memory and executes it 
 
-        where to put it 
-            added to the MBR, fix GRUB config so other OS can be booted 
-            GRUB should be placed on boot drive
-            windows reinstall, bootloader is erased means kali is on the hard drive but no longer 
-            accessible from the boot menu 
-            start Kali with rescue/enable=true parameter to reinstall the bootloader 
-            ➨ http://www.debian.org/releases/stable/amd64/ch08s07.html
+where to put it 
+- added to the MBR, fix GRUB config other OS can be booted 
+- GRUB should be placed on boot drive
+- windows reinstall, bootloader erased means kali is on the hard but no longer 
+- accessible from the boot menu 
+start Kali with rescue/enable=parameter to reinstall the bootloader 
+➨ http://www.debian.org/releasesstable/amd64/ch08s07.html
 
-    Finishing Installation 
+Finishing Installation 
 
-        cleanup and thats it 
-
-
-    Encrpyted Installation
-        LUKS - Linux Unified Key Setup, partiton encrypt 
-        LVM -   manage stroage dynamically
-
-        LVM 
-            virtual partiton, logical volume part of volume group  aka physical parttions 
-            LVM allows to make virtual partiton that spanes several disks 
-            easy to modify 
-
-        LUKS 
-            dm-crypt driver uses yr device mapper to make it 
-            needs swap to be encrypted because thats were the key is 
-
-        Setup   
-            choose  Guided Partition with Encrpyted LVM 
-            cant be booted or accessed 
-            empty areas are given random data 
-            used to split an encrpyted partiton into multiple logical volumes, 
-                not easy to extend size 
-
-            Partitioning scheme 
-                validate, confirm 
-
-        Continues as usual with apt     
-
-        its refereced /dev/vda 
-        its partiton /dev/vda[number]
-
-    Unattentded Installation 
-
-        how installer installs 
-            modular, executes tiny scripts udeb, each rely on debconf 
-            debconf answers all the user input prompts 
-
-            boot params 
-                debconf uses /proc/cmdline 
-                https://www.debian.org/releases/stable/amd64/apbs02#preseed-aliases
-
-            
-            preseed.cfg 
-                write this at installers initrd(used to start installer)
+    cleanup and thats it 
 
 
-            With a Preseed File in the Boot Media
-                /hd-media/preseed.cfg
-                /cdrom/preseed.cfg
-                preseed starts after language and country
-            
-            from network
-                preseed/url=http://server/preseed.cfg
-                cant do this until network-related debconf is answered
+Encrpyted Installation
+    __LUKS__ - Linux Unified Key Setup, partiton encrypt 
+    __LVM__ -   manage stroage dynamically
 
+LVM 
+    * virtual partiton, logical volume part of volume group  aka physical parttions 
+    * LVM allows to make virtual partiton that spanes several disks 
+    easy to modify 
 
-            to overcome the language limitation 
-                auto-install/enable=true in your preseed source or kernel cmd,
-                puts the language toward the end of debconf query 
+LUKS 
+* __dm-crypt__ driver uses yr device mapper to make it 
+* needs swap to be encrypted because thats were the key is 
 
+Setup   
+* choose  Guided Partition with Encrpyted LVM 
+* cant be booted or accessed 
+* empty areas are given random data 
+* used to split an encrpyted into multiple logical volumes, 
+    not easy to extend size 
+* Partitioning scheme 
+        validate, confirm 
 
-            foe debconf to answer critical ??
-                priority=critical
+Continues as usual with apt     
 
-            get answers provided to installer 
-                debconf-get-selections --installer
+- [x] its refereced /dev/vda 
+- [x]its partiton /dev/vda[number]
 
-            get answers for other packeages 
-                debconf-get-selections
+#### Unattentded Installation 
 
-            resources 
-                http://d-i.alioth.debian.org/manual/en.amd64/apb.html
+how installer installs 
+
+* modular, executes tiny scripts udeb, each rely on debconf 
+* __debconf__ answers all the user input prompts 
+
+boot params 
+    debconf uses __/proc/cmdline__ 
+    https://www.debian.org/releases/stable/amd64/apbs02#preseed-aliases
 
             
-        ARM Installations 
-            for non laptop devices offensive security has installation media for them 
-            https://www.offensive-security.com/kali-linux-arm-images/
+__preseed.cfg__ - write this at installers initrd(used to start installer)
 
-            to install 
-                download verify checksum 
-                unxz compress the .xz
-                get a SD , micro SD or eMMC module > 8GB
-                dd if=kali-image.img of=/dev/something bs=512k
-                plug storage with the installer into the ARM device 
-                uses the GUI, sniffer to find the dev IP 
-                change root password generate new nost keys 
+With a Preseed File in the Boot Media
+    /hd-media/preseed.cfg
+    /cdrom/preseed.cfg
+    preseed starts after language and country
+            
+from network
+    preseed/url=http://server/preseed.cfg
+    cant do this until network-related debconf is answered
 
-                for dev specifc problems http://docs.kali.org/category/kali-on-arm
 
-        Troubleshoot
-            the GUI is not helpful 
-            installer has 
-            ctrl -shift 
-                graphical   f5 
-                textual     f1
-                logs        f4  
-                shells      f2,f3 
-            the shell is limited 
+to overcome the language limitation 
+    auto-install/enable=true in your preseed source or kernel cmd,
+    puts the language toward the end of debconf query 
 
-            what u can do in the shell 
-                uses wget once the network is configured
-                inspect files 
-                    /var/log
-                /root is mounted on /target once partitioning is complete 
-                Save Debug Logs 
-                    file a bug report with the installer logs 
-                
+
+for debconf to answer critical ??
+    priority=critical
+
+get answers provided to installer 
+> debconf-get-selections --installer
+
+get answers for other packeages 
+> debconf-get-selections
+
+[resources](http://d-i.alioth.debian.org/manual/en.amd64/apb.html)
+
+            
+#### ARM Installations 
+for non laptop devices offensive security has [installation media](https://www.offensive-security.com/kali-linux-arm-images/) for them 
+
+to install 
+* download verify checksum 
+* __unxz__ compress the .xz
+* get a SD , micro SD or eMMC module 8GB
+* > dd if=kali-image.img of=/dev/something bs=512k
+* plug storage with the installer into the ARM device 
+* uses the GUI, sniffer to find the dev IP 
+* change root password generate new nost keys 
+[dev specifc problems](http://docs.kali.org/category/kali-on-arm)
+
+Troubleshoot
+* the GUI is not helpful 
+* installer has
+```
+ctrl -shift 
+    graphical   f5 
+    textual     f1
+    logs        f4  
+    shells      f2,f3 
+the shell is limited 
+```
+
+what u can do in the shell 
+* uses wget once the network is configured
+* inspect files 
+    /var/log
+* /root is mounted on /target once partitioning is complete 
+* Save Debug Logs 
+    file a bug report with the installer logs 
+    
 # 5. Configuring Kali 
 
-    Config the network     
+Config the network     
 
-        on Desktop
+on Desktop
 
-            network manager 
-            can create profiles modify network config 
-            handles connections with mobile broadband 
-            deals with many other network protocols 
+__network manager__ 
+can create profiles modify network config 
+handles connections with mobile broadband 
+deals with many other network protocols 
 
-        cmd Ifupdown
-             /etc/network/interfaces config 
-            /etc/init.d/networking startup script 
+__ifupdown__
+* __/etc/network/interfaces__ config 
+* __/etc/init.d/networking__  startup script 
 
-            to bring a service up /down 
-                ifup/ifdown network-device  
+* to bring a service up /down 
+    > ifup/ifdown network-device  
                 
-            /etc/network/interfaces config 
-                auto [network-device]
-                iface  [network-device] inet/inet6 [type] 
+* /etc/network/interfaces config 
+```
+auto [network-device]
+iface  [network-device] inet/inet6 [type] 
+```
+* 1st - configure once its available 
+* 2nd - configures interfaces
 
-                first directive - configure once its available 
-                2nd - configures interfaces
+* wireless interface need the wpasupplicant package
+```
+iface wlan0 inet dhcp 
+wpa-ssid MyNetowrk 
+wpa-psk Plaintextpassword 
+```
 
-            wireless interface need the wpasupplicant package
-              iface wlan0 inet dhcp 
-                wpa-ssid MyNetowrk 
-                wpa-psk Plaintextpassword 
+__systemd-networkd__ 
+* universal unlike debian 
+* very useful for virutal machines 
+* lacks wireless support 
+* disabled by default 
+```
+    # systemctl enable systemd-networkd
+    # systemctl enable systemd-resolved
+    # systemctl start systemd-networkd
+    # systemctl start systemd-resolved
+    # ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf       
+```
+configure .network files into 
+*   /etc
+*   /var
+*   /run 
+        /systemd/network
 
+file format 
+* systemd.network(5)
+* Match section indicates network interfaces
 
-        cmd systemd-networkd 
-            universal unlike debian 
-            very useful for virutal machines 
-            lacks wireless support 
-            disabled by default 
-                # systemctl enable systemd-networkd
-                # systemctl enable systemd-resolved
-                # systemctl start systemd-networkd
-                # systemctl start systemd-resolved
-                # ln -sf /run/systemd/resolve/resolv.conf /etc/resolv.conf
-                                
+config applies to 
+
+#### Managing Unix Users and Unix Groups
+
+/etc/
+* passwd,
+* group,
+* shadow,
+* gshadow
+
+adduser 
+* config 
+> /etc/adduser.conf 
+* a sample user home directory 
+> /etc/skel/
+* if u add  a user to sudo they have full sudo priviliges 
+
+getent 
+> getent passwd kaliuser1 
             
-            configure .network files into 
-                /etc
-                /var
-                /run 
-                    /systemd/network
+modifying accts 
+__passwd__ user changes passwd 
+__chfn__ modifes GECOS general Information field 
+__chsh__ - change shell, limited to /etc/shells unless root 
+__chage__ - allows root  to change passwd expiration settings 
+    
+to enable/disasble an acct 
+```
+passwd -l user
+passwd -u user 
+```
 
-            file format 
-                systemd.network(5)
-                Match section indicates network interfaces config applies to 
-
-
-
-    Managing Unix Users and Unix Groups
-
-        /etc/
-            passwd,group,shadow,gshadow
-
-        adduser 
-            config 
-                /etc/adduser.conf 
-            a sample user home directory 
-                /etc/skel/
-            if u add  a user to sudo they have full sudo priviliges 
-
-            getent 
-                getet passwd kaliuser1 
+unix groups 
+* addgroup 
+* delgroup
+* groupmod 
+* gpasswdgroup
+* gpasswd -r group
             
-        modifying accts 
-            passwd 
-                user changes passwd 
-            chfn 
-                modifes GECOS general Information field 
-            chsh 
-                change shell, limited to /etc/shells unless root 
-            chage 
-                allows root  to change passwd expiration settings 
+if a user needs to change groups 
+* newgrp
+* sg 
+* setgid, makes files created to belong * the right group 
+
+#### Configuring Services 
+
+unknown programs 
+
+* __/usr/share/doc/package/README__ , overview of the program and many configs that would frustrate you otherwise 
+* dpkg -L package - lists files included in package 
+* dpkg -s package - display package metadata 
+* config examples 
+> /usr/share/doc/package/examples/ 
             
-            to enable/disasble an acct 
-                passwd -l user
-                passwd -u user 
-            
-            unix groups 
-                addgroup 
-                delgroup
-                groupmod 
-                gpasswdgroup
-                gpasswd -r group
-            
-            if a user needs to change groups 
-                newgrp
-                sg 
-                setgid, makes files created to belong to the right group 
+ssh 
+* systemctl start/enable ssh 
+* config 
+    /etc/ssh/sshd_config
+* systemctl reload ssh
+* you want to reset your ssh keys passwd
+[...]
+# rm /etc/ssh/ssh_host_*
+# dpkg-reconfigure openssh-server
+# service ssh restart
 
-    Configuring Services 
+postgresql 
+* systemctl start
+* can have several postgresql versions 
+* /etc/postgresql/[version]/[cluster-name]/ 
+new cluster get assigned next availble port ## 
 
-        unknown programs 
+* localhost TCP 5432 
+* file-based socket  /var/run/postgresql/.s.PGSQL.5432 
+* configured in postgresql.conf 
+* pg_hba.conf
+    whos allowed and authentication method 
+* TCP has its own username and password 
+postgres is the root postgres, used to make new users and databases 
 
-            /usr/share/doc/package/README , overview of the program and many configs that would frustrate you otherwise 
-            dpkg -L package - lists files included in package 
-            dpkg -s package - display package metadata 
-            config examples 
-                /usr/share/doc/package/examples/ 
-            
-        ssh 
-            systemctl start/enable ssh 
-            config 
-                /etc/ssh/sshd_config
-            systemctl reload ssh
-            you want to reset your ssh keys 
-            passwd
-            [...]
-            # rm /etc/ssh/ssh_host_*
-            # dpkg-reconfigure openssh-server
-            # service ssh restart
-
-        postgresql 
-            systemctl start
-            can have several postgresql versions 
-            /etc/postgresql/[version]/[cluster-name]/ 
-            new cluster get assigned next availble port ## 
-
-            listening 
-                localhost TCP 5432 
-                file-based socket  /var/run/postgresql/.s.PGSQL.5432 
-                configured in postgresql.conf 
-                pg_hba.conf
-                    whos allowed and authentication method 
-                TCP has its own username and password 
-                postgres is the root postgres, used to make new users and databases 
-
-            users and dbs 
-                createuser,dropuser,createdb,dropdb 
-                each cluster is on a port 
-                to create a role 
-                    su - postgres
-                    $ createuser -P king_phisher
-                    Enter password for new role:
-                    Enter it again:
-                    $ createdb -T template0 -E UTF-8 -O king_phisher king_phisher
-                    $ exit
+users and dbs 
+* createuser,dropuser,createdb,dropdb 
+* each cluster is on a port 
+* to create a role 
+```
+su - postgres
+$ createuser -P king_phisher
+Enter password for new role:
+Enter it again:
+$ createdb -T template0 -E UTF-8 -O king_phisher king_phisher
+$ exit
+```
                 
-                to connect to postgres 
-                    psql -h localhost -U king_phisher king_phisher
+to connect to postgres 
+```
+psql -h localhost -U king_phisher king_phisher
+```    
 
-            Managing PostgreSQL Clusters
-                pg_createcluster, pg_dropcluster, pg_ctlcluster, pg_upgradecluster,
-                pg_renamecluster, and pg_lsclusters.
+Managing PostgreSQL Clusters
+* pg_createcluster, pg_dropcluster,  
+* pg_ctlcluster, pg_upgradecluster,
+* pg_renamecluster, and pg_lsclusters.
 
-            when PostgreSQL gets a major update it will create a new cluster that runs on the next port and you will use the old 
-            version until you migrate the databases from the old to the new 
+* when PostgreSQL gets a major update it will create a new cluster that runs on the next port and you will use the old 
+version until you migrate the databases from the old to the new 
 
-
-
-            pg_upgradecluster old-version cluster-name 
-            pg_dropcluster new-version cluster-name
-
-            then drop the original old cluster 
+* pg_upgradecluster old-version cluster-name 
+* pg_dropcluster new-version cluster-name, then drop the original old cluster 
 
 
-        apache
-            modular program 
-            a2enmod module 
-            a2dismod module
-            toggle symlinks 
-                /etc/apache2/mods-enabled/,
-                /etc/apache2/mods-available/
+apache
+* modular program 
+* a2enmod module 
+* a2dismod module
+* toggle symlinks 
+    /etc/apache2/mods-enabled/,
+    /etc/apache2/mods-available/
             
-            ssl 
-                since apache 2.4 
-                /etc/apache2/sites-available/default-ssl.conf
+ssl 
+* since apache 2.4 
+* /etc/apache2/sites-available/default-ssl.conf
 
-            listens on port 80
-            serves from /var/www/html 
-            /etc/apache2/sites-enabled/000-default.conf
-
-
-    Config Virtual Hosts 
-        Requests concerning unknown virtual hosts will always be served by the
-        first defined virtual host
-        
-        <VirtualHost *:80>
-        ServerName www.example.com
-        ServerAlias example.com   
-        DocumentRoot /srv/www.example.com/www
-        </VirtualHost>    
+* listens on port 80
+* serves from /var/www/html 
+* /etc/apache2/sites-enabled/000-default.conf
 
 
-        Common Directives 
-            you have directory blocks 
-            <Directory /var/www>
-            Options Includes FollowSymLinks
-            AllowOverride All
-            DirectoryIndex index.php index.html index.htm
-            </Directory>       
-
-            Directory 
-                list of files to try when user matches directoy 
-
-            Options list of options to enable 
-                None all values accordingly 
-            ExecCGI - indicates CGI scripts are executed 
-            FollowSymLinks,SymLinksIfOwnerMatch  - and that the targets exist 
-            Includes - enables SSI, embeded in HTML pages 
-            Indexes - tells the server to list to the contents of the directory 
-            MultiViews- enables content negotation 
-
-        authentication
-            .htaccess - where directives are stored 
-            restrict ExecCGI , so users can't do things as www-data 
-
-            non secure base64 encrpytion 
-                Require valid-user
-                AuthName ”Private directory”
-                AuthType Basic
-                AuthUserFile /etc/apache2/authfiles/htpasswd-private
-
-            to change web users passwords 
-                htpasswd /etc/apache2/authfiles/htpasswd-private user
+Config Virtual Hosts 
+* Requests concerning unknown virtual hosts will always be served by the first defined virtual host
+    
+<VirtualHost *:80>
+ServerName www.example.com
+ServerAlias example.com   
+DocumentRoot /srv/www.example.com/www
+</VirtualHost>    
 
 
-            Restricting  
-                Require directive
-                    Require ip 192.168.0.0/16
+Common Directives 
+* you have directory blocks 
 
-    Managing services 
+<Directory /var/www>
+Options Includes FollowSymLinks
+AllowOverride All
+DirectoryIndex index.php index.html index.htm
+</Directory>    
 
-        init and full control system- systemd 
+__Directory__ - list of files to try when user matches directoy 
 
-        systemctl 
-            lists units, services are a part  
+__Options__ list of options to enable 
+    None all values accordingly 
+    * __ExecCGI__ - indicates CGI scripts are  executed 
+    * __FollowSymLinks__ 
+    * __SymLinksIfOwnerMatch__  - and that the targets exist 
+    __Includes__ - enables SSI, embeded in HTML pages 
+    __Indexes__ - tells the server to list to the contents of the directory 
+    __MultiViews__- enables content negotation 
 
-        service   
-            service units in files described in 
-            /lib/systemd/system/ (or /run/systemd/system/, or /etc/systemd/system/
-            managed by [service-name].service.d/*.conf  files 
+authentication
+    .htaccess - where directives are stored 
+    restrict ExecCGI , so users can't do things as www-data 
 
-            look like this 
-            [Unit]
-            Description=OpenBSD Secure Shell server
-            After=network.target auditd.service
-            ConditionPathExists=!/etc/ssh/sshd_not_to_be_run
-            [Service]
-            EnvironmentFile=-/etc/default/ssh
-            ExecStart=/usr/sbin/sshd -D $SSHD_OPTS
-            ExecReload=/bin/kill -HUP $MAINPID
-            KillMode=process
-            Restart=on-failure
-            RestartPreventExitStatus=255
-            Type=notify
-            [Install]
-            WantedBy=multi-user.     
+non secure base64 encrpytion 
+* Require valid-user
+* AuthName ”Private directory”
+* AuthType Basic
+* AuthUserFile /etc/apache2/authfiles/htpasswd-private
 
-            target units 
-                they group dependencies on a service so a service can do more     
-                systemctl enable foo.service 
-                    system starts enables units required to reach the default target ,symlink to the graphical target, depends on multi
-                    user target 
-                when you enable a service systemd  adds dependencies on targets in WantedBy entry of the [Install]
-                section of the service unit file 
+to change web users passwords 
+* htpasswd /etc/apache2/authfiles htpasswd-private user
 
-            commands 
-                enable and disable only decide what happens at next boot     
+
+Restricting  
+    Require directive
+        Require ip 192.168.0.0/16
+
+#### Managing services 
+
+    init and full control system- systemd 
+
+    systemctl 
+        lists units, services are a part  
+
+service   
+service units in files described in 
+* /lib/systemd/system/ (or 
+* /run/systemd/system/, or 
+* /etc/systemd/system/
+* managed by [service-name].service.d/*.conf  files 
+```
+[Unit]
+Description=OpenBSD Secure Shell server
+After=network.target auditd.service
+ConditionPathExists=!/etc/ssh/sshd_not_to_be_run
+[Service]
+EnvironmentFile=-/etc/default/ssh
+ExecStart=/usr/sbin/sshd -D $SSHD_OPTS
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+RestartPreventExitStatus=255
+Type=notify
+[Install]
+WantedBy=multi-user.     
+```
+
+__target units__ -they group dependencies on a service so a service can do more     
+systemctl enable foo.service 
+    system starts enables units required to reach the default target ,symlink to the graphical target, depends on multi
+    user target 
+when you enable a service systemd  adds dependencies on targets in WantedBy entry of the [Install]
+section of the service unit file 
+commands 
+    enable and disable only decide what happens at next boot     
 
 
 
