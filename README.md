@@ -798,25 +798,26 @@ commands
 
 ## 6.1 Info Documents 
 
-    GNU project has docs in info format but you are good to use the pinfo command instead 
-    info page is english only, when something is not availble in info you get the man page
+* GNU project has docs in info format but you are good to use __pinfo__ 
+* info page is english only, when something is not availble in info you get the man page
 
 
 ### 6.1.3 Package specifc documentation 
 
-    found in /usr/share/doc/package/ 
-    if doc is large, the main doc will refer you where to find it 
-    also has debian helpers
-    - README.Debian every characteristic you need to know of the name 
-    - changelog.Debian.gz allows user to follow modifications made to debian over time
-    - NEWS.Debian.gz documents major changes that concern the administrator 
+* found in __/usr/share/doc/package/__ 
+* if doc is large, the main doc will refer you where to find it 
+also has debian helpers
+* README.Debian every characteristic you need to know of the name 
+* changelog.Debian.gz allows user to follow modifications made to debian over time
+* NEWS.Debian.gz documents major changes that concern the administrator 
 
 
 ### 6.1.4 Websites 
 use your system specs to limit your search 
 
 
-### 6.1.5 Kali Documentation at docs.kali.org
+### 6.1.5 [Kali Documentation](http://docs.kali.org) 
+
 step  by step 
 how to documentation
 
@@ -833,12 +834,12 @@ how to documentation
 
 ## 6.2. Kali Linux Communities
 
-### 6.2.1. Web Forums on forums.kali.org
+### 6.2.1. [Web Forums](https://forums.kali.org)
 
 ### 6.2.2. #kali-linux IRC Channel on Freenode
 port 6667- encrypted 
 port 6666 - free text 
-need hexchat,irssi,     https://webchat.freenode.net
+need hexchat,irssi, https://webchat.freenode.net
 
 
 ## 6.3. Filing A Good Bug Report 
@@ -846,9 +847,8 @@ need hexchat,irssi,     https://webchat.freenode.net
 ###  6.3.1. Generic Recommendations
 
 * write in english 
-* Explain what you were trying to do and how you
-* expected the program to behave.
-     - mabye you were not supposed to use it that way 
+* Explain what you were trying to do and how you expected the program to behave.
+    - mabye you were not supposed to use it that way 
 * long is better 
 * using the latest version 
 * one bug report per issue 
@@ -865,10 +865,9 @@ need hexchat,irssi,     https://webchat.freenode.net
     $ dpkg -s sparta | grep ^Version:
     Version: 1.0.1+git20150729-0kali1
 
-since it has kali in the string , it modifies by kali
-if this werent the case it came from debian 
-since kali does modification see if it works in a debian vm 
-https://www.debian.org/devel/debian-installer/
+* since it has kali in the string , it modifies by kali
+* no kali string comes from  debian 
+* since kali does modification see if it works in a [debian vm](https://www.debian.org/devel/debian-installer/)
 if you dont know (say an integration problem) file on both sides and cross reference 
 
 > to find where to file a bug report 
@@ -879,7 +878,7 @@ if you dont know (say an integration problem) file on both sides and cross refer
 ### 6.3.3. How to File a Bug Report
 
 #### Kali 
- http://bugs.kali.org
+http://bugs.kali.org
 
 #### Debian 
 __Debbugs__ email based
@@ -888,6 +887,7 @@ XXXXXX@bugs.debian.org.
 also check 
 https://bugs.debian.org/package 
 https://bugs.debian.org/XXXXXX
+
 
 #### Setting Up Reportbug 
 use it to send emails to debian 
@@ -903,7 +903,7 @@ use it to send emails to debian
 - what are you trying to prevent from occuring 
 - who is the enemy
 
-> Bruce Schneier security is a process not a product 
+> Bruce Schneier "security is a process not a product "
 
 - if a fort to protect a  calculator, u dont need it
 -  sensitive stuff should only be reached by miimal ports
@@ -938,7 +938,7 @@ use it to send emails to debian
 ## 7.4. Firewall or Packet Filtering
 
 - there are filtering network gateway 
-- __netflier firewall__  linux kernel uses  
+- __netflier__ firewall  linux kernel uses  
 - __iptables__, __ip6tables__, __fwbuilder__ and commands use in parallel it manages 
     netflier 
   
@@ -1101,20 +1101,13 @@ __/etc/logcheck/logcheck.logfiles__ - list of monitored files only if /etc/rsysl
 - complex selection mechanism 
 
 ##### Types of Rules 
-    • those that qualify a message as a
-    cracking attempt 
-    (stored in a file in the /etclogcheck/
-    cracking.d/ directory);
-    • ignored cracking attempts
-     (/etc/logcheck/cracking.ignore.d/);
-    • those classifying a
-     message as a security alert 
-     (/etc/logcheck/violations.d/);
-    • ignored security alerts
-     (/etc/logcheck/violations.ignore.d/);
-    • finally, those applying
-     to the remaining messages 
-     (considered as system events).
+• those that qualify a message as a
+cracking attempt  (stored in a file in the /etclogcheck/
+cracking.d/ directory);
+• ignored cracking attempts (/etc/logcheck/cracking.ignore.d/);
+• those classifying a message as a security alert  (/etc/logcheck/violations.d/);
+• ignored security alerts (/etc/logcheck/violations.ignore.d/);
+• finally, those applying to the remaining messages  (considered as system events).
 
 ignore.d - used to ignore messages 
 system event always signalned unless a rule states to ignore it 
@@ -1153,7 +1146,7 @@ __Monitoring Files: AIDE Advanced Intrusion Detection Environment__
 
 # 8 Debian Package Management
 got to know when not to get yourself in a configure make gcc, gdb problem 
-debian and kali are different and not every debian package will work properly in kaliS
+debian and kali are different and not every debian package will work properly in kali
 
 ## 8.1. Introduction to APT
 
@@ -1162,10 +1155,10 @@ __debian package__ compressed archive of software information
 __binary package__ - files that can be directly used
 __soruce package__ -source code and instructions to build binary
 
-dpkg 
+__dpkg__ 
 only  knows what is installed on the system and whatever you provide on the command line, but knows nothing of the other available package
 
-apt 
+__apt__ 
 installs a packages and does well  to resolve all the dependiences recursively 
 
 gcc,make and compile, the program would always fail because of a missing dependency 
@@ -1210,7 +1203,7 @@ __Kali-Roling__ the one made for end users updated everyday
 __Kali-Dev__ - where Kali devs fix package problems, has the latest new-out-the-box updates
 
 __Kali-Bleeding-Edge__ - as soon as Kali fixes a reported bug they place it here 
-, they are not tested so APT marks as "watch out" when doing dist-upgrade 
+* 1they are not tested so APT marks as "watch out" when doing dist-upgrade 
 keep it away from main sources.list 
 
 - [x] if you a mirror problem 
@@ -1392,25 +1385,24 @@ names all of packages at least once in the cache
 [Kali Bug Tracker](http://bugs.kali.org/)
 [Debian Bug Tracker](https://bugs.debian.org/)
 
-u can recompile it 
-users posted workarounds 
-
-> Downgrade 
-
-Kali-roling theres usually one package version
+*  recompile  
+* users posted workarounds 
+* Downgrade 
+    Kali-roling theres usually one package version
 
 try to find the .deb package and install with dpkg check in  
 
 *  /var/cache/apt/archives/
-* __pool__ directory in your kali mirro
+* __pool__ directory in your kali mirror
 *  http://snapshot.debian.org if it was debian 
 
 #### Dealing with Broken Maintainer Scripts
 
 usually __postinst__ script fails 
 * edit the script 
-* maintainer scripts stored in /var/lib/dpkg/info/
-* add 
+* maintainer scripts stored in __/var/lib/dpkg/info/__
+
+add 
 ```
 #!/bin/sh
 set -x
@@ -1428,16 +1420,16 @@ dpkg --configure -a
 /var/log/dpkg.log
 
 #### if you damage a package
-
-*apt,apt-get,aptitude --reinstall install [package]
-*if you do install dpkg sees its there and will say no 
+ 
+* apt,apt-get,aptitude --reinstall  [package]
+* if you do install dpkg sees its there and will say no 
 * do use reinstall, attackers might have modified apt or dpkg 
 
 #### Leveraging --force-* to Repair Broken Dependencies
 
 if there is a missing dependency or a broken package apt wont do anything. apt wants the system to be in a consistent state 
 
-modify */var/lib/dpkg/status
+modify /var/lib/dpkg/status
 * in order for apt to stay in an unconsistent state 
 * __backports__ newer version recompiled to run in older env.
 
@@ -1548,25 +1540,27 @@ more info
 ### 8.3.3. Working with Several Distributions
 
 apt install package/
-unstable instalss from debian/unstable 
+unstable installs from debian/unstable 
 -t flag to fix things
 
 
 > Example 
 
 install a v1
-
+```
 a v1 *Kali-Rolling* = 990
 a v2 *Kali Dev* = 500
 a v3 *Kali Unstable* = 500
-
+```
 kali keeps v1 
 
 install a v2 
 
+```
 a v1 *Kali-Rolling* = 990
 a v2 *Kali Dev* = 500
 a v3 *Kali Unstable* = 500
+```
 
 kali takes debian unstable 
 
@@ -1617,12 +1611,13 @@ the __Multi-Arch: same__ header various architectures can be safely coinstalled
 * must have same version 
 
 dependency architecture
+go over this again
 * dependency can be weakened with __package:any__  , but foreign packages only satisfy with __Multi-Arch: allowed__
 
 ### 8.3.6. Validating Package Authenticity
 
 Kali provides a tamper-proof seal 
-f cryptographic hashes and a signature.
+woth cryptographic hashes and a signature.
 
 signed file is in the Release file 
 list of packages, Packages.gz, Packages.xz 
@@ -1725,6 +1720,8 @@ as well as installable packages
 
 #### Provided Items: the Provides Field
 
+__Virtual packages__ - they are only a means of identifying real packages based on common, logical criteria
+
 * virtual package , using a virtual package to associate a generic
 service with it 
     - so instead of say i need dep. a,b,c the package says, I need a mail client 
@@ -1733,12 +1730,11 @@ service with it
 
 * package replaces another but still satisfies dependecies as a substitution package 
 
-__Virtual packages__ - they are only a means of identifying real packages based on common, logical criteria
+
 
 ![](provides_in_control_for_packages.PNG)
 
-in the image, perl 5.8 has the dep built in, so now apt can toss it once the legacy
-perl is removed
+in the image, perl 5.8 has the dep built in, so now apt can toss it once the legacy perl is removed
 
 #### Replacing Files: The Replaces Field
 
@@ -1760,9 +1756,8 @@ perl is removed
 #### Installation and Upgrade Script Sequence
 
 >  installation (or an update):
-1. update- old-prerm upgrade new-version.
-2. update -new-preinst upgrade old-version
-
+1. update- *old-prerm upgrade new-version*
+2. update- *new-preinst upgrade old-version*
     first install -new-preinst install [old-verison] if installed & removed, not purged
 3.  new packaged files are unpacked
 4. update- old-postrm upgrade new-version
